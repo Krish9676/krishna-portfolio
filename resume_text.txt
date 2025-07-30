@@ -1,0 +1,129 @@
+GOPIKRISHNA NALLAGORLA
+Linkedin |
+
+gopik8023@gmail.com
+
+Contact - 9676246407
+
+Experience
+Elai AgriTech Pvt Ltd
+
+Pune, Maharashtra
+
+Data Scientist
+
+Dec 2023 – Present
+
+● End-to-End Machine Learning Solutions: Designed and implemented ML/DL models for complex geospatial
+challenges, leveraging remote sensing, satellite imagery analysis, and computer vision to drive data-driven innovation
+with measurable business impact.
+● Advanced Geospatial Analytics: Led complete lifecycle of geospatial data science projects, developing farm boundary
+delineation models achieving 80% precision using cutting-edge remote sensing techniques, satellite imagery processing,
+and deep learning architectures.
+● Data Science Pipeline Development: Demonstrated expertise in complete data science lifecycle from geospatial data
+acquisition and preprocessing to feature engineering, model development, validation, and production deployment via
+GitHub.
+● Technical Domain Expertise: Applied deep knowledge in multi-spectral satellite data, NDVI analysis, temporal data
+processing, and building scalable ML models. Specialized in geospatial analytics, remote sensing interpretation, and
+domain-specific ML solutions.
+● Business Impact & Innovation:
+• Secured company funding through innovative geospatial data science solutions, contributing to business growth
+• Streamlined analytical processes reducing manual effort by 70% while optimizing decision-making workflows
+● Advanced Predictive Modeling:
+• Built ensemble models (Random Forest, XGBoost, LSTM) for crop identification achieving 90% accuracy
+• Developed yield estimation models using satellite imagery and health indicators with 87% prediction accuracy
+● Real-Time Analytics & Monitoring:
+• Implemented real-time monitoring systems using multi-spectral satellite data and IoT integration
+• Created automated anomaly detection for data quality monitoring and risk assessment
+• Developed interactive dashboards and BI systems for actionable insights
+
+Technical Skills
+Programming: Python, SQL, R, OOP, Functional Programming
+ML/AI: Scikit-learn, TensorFlow, Keras, PyTorch, XGBoost, LightGBM, Random Forest, SVM, KNN, Regression, Decision Trees Deep
+Learning: CNN, RNN, LSTM, Autoencoders, Transfer Learning Statistics: Hypothesis Testing, A/B Testing, Time-Series Analysis,
+Bayesian Statistics
+Deployment: Flask, Docker, REST APIs Cloud: AWS (S3, EC2, Lambda, SageMaker), Databases: SQL Server, PostgreSQL, MongoDB
+Visualization: Power BI, Tableau, Matplotlib, Seaborn, Plotly
+
+Projects
+Crop Identification and Yield Estimation with Multi-Spectral Analysis
+• Built sophisticated machine learning models integrating Random Forest, XGBoost, and LSTM networks for
+multi-class crop identification and temporal analysis, achieving 90% accuracy across diverse crop types, seasonal
+variations, and geographical regions using satellite imagery and NDVI data.
+• Developed advanced yield estimation models by analyzing multi-spectral satellite data, crop health indices, and
+phenological stages, providing stakeholders with actionable insights achieving 87% accuracy for agricultural
+planning, risk assessment, and supply chain optimization.
+Real-Time Crop Health Monitoring and Geospatial Analytics
+• Designed and implemented empirical models for continuous crop health monitoring using time-series satellite
+data, spectral analysis, and IoT sensor integration, creating scalable geospatial analytics solutions for precision
+agriculture.
+
+•
+
+Developed automated alert systems and predictive dashboards providing farmers and agricultural stakeholders
+with real-time insights, improving crop management practices, operational efficiency, and enabling data-driven
+agricultural decision-making.
+Soil Nutrient Analysis and Agricultural Growth Stage Prediction
+• Conducted comprehensive geospatial analysis of soil nutrient distribution patterns using satellite imagery, spectral
+analysis, and machine learning models to optimize crop cycles and predict agricultural growth stages with high
+precision.
+• Implemented systematic approaches integrating multi-source geospatial data (satellite, soil sensors, weather data)
+with advanced analytics for improved agricultural monitoring, resource optimization, and strategic planning
+across diverse agricultural landscapes.
+Anomaly Detection in Agricultural Geospatial Data
+• Implemented advanced unsupervised learning models and statistical algorithms to identify anomalies in crop
+health metrics, yield patterns, and geospatial data quality, leveraging time-series analysis and spatial pattern
+recognition techniques.
+• Developed automated anomaly detection systems for agricultural risk management, enabling proactive issue
+identification, reducing operational risks, and optimizing resource allocation in precision agriculture operations
+through intelligent data monitoring.
+Farm Boundary Delineation Using Remote Sensing
+• Led the development of a comprehensive machine learning pipeline combining computer vision and geospatial
+analytics to delineate agricultural field boundaries with 80% accuracy, utilizing advanced remote sensing
+techniques, satellite imagery processing, and semantic segmentation algorithms.
+
+Education
+Dhirubhai Ambani Institute of Information and Communication Technology (DA-IICT)
+● M.Sc. Data Analytics
+● CGPA: 7.1
+
+2022 - 2024
+
+Relevant Coursework
+● Python programming
+
+Machine learning
+
+Data Structures
+Deep Learning
+
+Spatial Data Analysis
+Image Analysis
+
+GIS
+Statistica
+
+Professional Skills
+● Spatial Problem Solving ● Technical Communication ● Project Management ● Field Survey Coordination ● Cross-functional
+Collaboration.
+
+Positions of Responsibility
+● Core Team Member & Project Lead - Elai AgriTech Pvt Ltd
+● Key founding team member instrumental in building the company's geospatial and remote sensing capabilities,
+establishing technical frameworks and operational workflows. ● Led and organized multi-disciplinary teams for
+complex remote sensing projects, coordinating between field operations, data processing, and analytical teams. ●
+Managed end-to-end project execution for major agricultural mapping initiatives, ensuring quality deliverables and
+adherence to project timelines. ● Established standard operating procedures for geospatial data processing, quality
+control protocols, and technical documentation standards. ● Mentored team members on advanced remote sensing
+techniques and GIS methodologies, building internal technical capacity.
+
+Interests
+● Geospatial Technology Innovation ● Agricultural Sustainability ● Outdoor Activities and Sports ● Technical Blogging on Remote
+Sensing Applications
+
+Languages
+● English(fluent)
+● Hindi(fluent)
+● Telugu(native)
+
+
