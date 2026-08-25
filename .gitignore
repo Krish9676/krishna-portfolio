@@ -35,8 +35,8 @@ yarn-error.log*
 .env*
 
 # personal documents and local files
-/public/resume.pdf
 *.pdf
+!/public/resume.pdf
 resume_text.txt
 *.docx
 Gopikrishna_Resume*
