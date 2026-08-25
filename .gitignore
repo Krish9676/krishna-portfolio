@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/profile
 
 # next.js
 /.next/
@@ -32,6 +33,14 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+
+# personal documents and local files
+/public/resume.pdf
+*.pdf
+resume_text.txt
+*.docx
+Gopikrishna_Resume*
+Krishna_Datascientist*
 
 # vercel
 .vercel
