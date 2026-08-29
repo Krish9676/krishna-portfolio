@@ -3,6 +3,7 @@
 import {
   AxisLabel,
   ChartFrame,
+  labelGutter,
   LegendSwatch,
   niceTicks,
   palette,
@@ -32,6 +33,7 @@ export function BarSet({
   title,
   subtitle,
   caption,
+  note,
   representative,
   referenceLabel,
 }: {
@@ -41,6 +43,7 @@ export function BarSet({
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
   representative?: boolean;
   referenceLabel?: string;
 }) {
@@ -50,6 +53,7 @@ export function BarSet({
       title={title}
       subtitle={subtitle}
       caption={caption}
+      note={note}
       representative={representative}
       minWidth={420}
       legend={
@@ -107,6 +111,7 @@ export function StackedBars({
   title,
   subtitle,
   caption,
+  note,
   representative,
   height = 250,
 }: {
@@ -118,6 +123,7 @@ export function StackedBars({
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
   representative?: boolean;
   height?: number;
 }) {
@@ -138,6 +144,7 @@ export function StackedBars({
       title={title}
       subtitle={subtitle}
       caption={caption}
+      note={note}
       representative={representative}
       legend={
         <>
@@ -219,6 +226,8 @@ export function Dumbbell({
   title,
   subtitle,
   caption,
+  note,
+  representative,
   fromLabel = "before",
   toLabel = "after",
 }: {
@@ -228,14 +237,29 @@ export function Dumbbell({
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
+  representative?: boolean;
   fromLabel?: string;
   toLabel?: string;
 }) {
-  const W = 720;
   const rowH = 52;
-  const m = { top: 22, right: 30, bottom: 34, left: 168 };
+  const plotW = 500;
+  const m = {
+    top: 22,
+    right: 58,
+    bottom: 34,
+    // 12px body labels above 10px mono notes
+    left: labelGutter(
+      [
+        { labels: rows.map((r) => r.label), charW: 6.7 },
+        { labels: rows.map((r) => r.note), charW: 6.2 },
+      ],
+      { min: 150, max: 340 }
+    ),
+  };
+  const W = m.left + plotW + m.right;
   const H = m.top + rows.length * rowH + m.bottom;
-  const sx = scaleLinear(domain, [m.left, W - m.right]);
+  const sx = scaleLinear(domain, [m.left, m.left + plotW]);
   const ticks = niceTicks(domain[0], domain[1], 6);
 
   return (
@@ -243,6 +267,9 @@ export function Dumbbell({
       title={title}
       subtitle={subtitle}
       caption={caption}
+      note={note}
+      representative={representative}
+      minWidth={Math.max(520, W)}
       legend={
         <>
           <LegendSwatch color={palette.faint} label={fromLabel} shape="dot" />

@@ -2,7 +2,7 @@
 // cadence strips and the terminal-state fan. Structural rather than quantitative:
 // these show what the system does and in what order.
 
-import { ChartFrame, palette } from "./primitives";
+import { ChartFrame, labelGutter, palette } from "./primitives";
 
 // ────────────────────────────────────────────────────────────
 // StageChain — a numbered pipeline
@@ -38,7 +38,7 @@ export function StageChain({
   note?: string;
 }) {
   return (
-    <ChartFrame title={title} subtitle={subtitle} caption={caption} minWidth={320}>
+    <ChartFrame title={title} subtitle={subtitle} caption={caption} note={note} minWidth={320}>
       <div className="stagechain">
         {stages.map((s, i) => {
           const c = kindColor[s.kind ?? "model"];
@@ -58,7 +58,6 @@ export function StageChain({
           );
         })}
       </div>
-      {note && <p className="chart-note">{note}</p>}
     </ChartFrame>
   );
 }
@@ -72,14 +71,16 @@ export function LayerStack({
   title,
   subtitle,
   caption,
+  note,
 }: {
   layers: { name: string; role: string; items: string[]; color: string }[];
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
 }) {
   return (
-    <ChartFrame title={title} subtitle={subtitle} caption={caption} minWidth={320}>
+    <ChartFrame title={title} subtitle={subtitle} caption={caption} note={note} minWidth={320}>
       <div className="layerstack">
         {layers.map((l, i) => (
           <div key={l.name} className="layerstack-row">
@@ -123,6 +124,7 @@ export function Roadmap({
   title,
   subtitle,
   caption,
+  note,
 }: {
   weeks: number;
   tracks: { label: string; from: number; to: number; color: string; note?: string }[];
@@ -130,16 +132,33 @@ export function Roadmap({
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
 }) {
-  const W = 740;
   const rowH = 40;
-  const m = { top: 42, left: 190, right: 24, bottom: 30 };
+  const plotW = 526;
+  const m = {
+    top: 42,
+    left: labelGutter([{ labels: tracks.map((t) => t.label), charW: 6.4 }], {
+      min: 150,
+      max: 300,
+      pad: 20,
+    }),
+    right: 24,
+    bottom: 30,
+  };
+  const W = m.left + plotW + m.right;
   const H = m.top + tracks.length * rowH + m.bottom;
-  const iw = W - m.left - m.right;
+  const iw = plotW;
   const sx = (w: number) => m.left + (w / weeks) * iw;
 
   return (
-    <ChartFrame title={title} subtitle={subtitle} caption={caption}>
+    <ChartFrame
+      title={title}
+      subtitle={subtitle}
+      caption={caption}
+      note={note}
+      minWidth={Math.max(520, W)}
+    >
       <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} role="img" aria-label={title}>
         {tranches?.map((t, i) => (
           <g key={t.label}>
@@ -221,11 +240,19 @@ export function Roadmap({
 export function CadenceStrip({
   days,
   sources,
+  tickEvery = 30,
+  unitPrefix = "d",
   title,
   subtitle,
   caption,
+  note,
 }: {
   days: number;
+  /** Spacing of the axis ticks, in whatever unit `days` counts. A three-year
+   *  record ticked every 30 units produces 37 overlapping labels. */
+  tickEvery?: number;
+  /** Prefix on the tick labels, so the same component can strip days or months. */
+  unitPrefix?: string;
   sources: {
     label: string;
     color: string;
@@ -238,24 +265,47 @@ export function CadenceStrip({
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
 }) {
-  const W = 740;
   const rowH = 46;
-  const m = { top: 20, left: 156, right: 20, bottom: 32 };
+  const plotW = 564;
+  const m = {
+    top: 20,
+    left: labelGutter(
+      [
+        { labels: sources.map((x) => x.label), charW: 6.4 },
+        { labels: sources.map((x) => x.note), charW: 5.6 },
+      ],
+      { min: 140, max: 280, pad: 20 }
+    ),
+    right: 20,
+    bottom: 32,
+  };
+  const W = m.left + plotW + m.right;
   const H = m.top + sources.length * rowH + m.bottom;
-  const iw = W - m.left - m.right;
+  const iw = plotW;
   const sx = (d: number) => m.left + (d / days) * iw;
 
   return (
-    <ChartFrame title={title} subtitle={subtitle} caption={caption}>
+    <ChartFrame
+      title={title}
+      subtitle={subtitle}
+      caption={caption}
+      note={note}
+      minWidth={Math.max(520, W)}
+    >
       <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H} role="img" aria-label={title}>
-        {Array.from({ length: Math.floor(days / 30) + 1 }, (_, i) => i * 30).map((d) => (
+        {Array.from(
+          { length: Math.floor(days / tickEvery) + 1 },
+          (_, i) => i * tickEvery
+        ).map((d) => (
           <g key={d}>
             <line x1={sx(d)} y1={m.top - 8} x2={sx(d)} y2={m.top + sources.length * rowH}
               stroke={palette.grid} />
             <text x={sx(d)} y={m.top + sources.length * rowH + 16} textAnchor="middle"
               fontSize="9" fill={palette.faint} fontFamily="var(--font-mono)">
-              d{d}
+              {unitPrefix}
+              {d}
             </text>
           </g>
         ))}
@@ -303,14 +353,16 @@ export function TerminalStates({
   title,
   subtitle,
   caption,
+  note,
 }: {
   states: { code: string; meaning: string; next: string; color: string }[];
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
 }) {
   return (
-    <ChartFrame title={title} subtitle={subtitle} caption={caption} minWidth={320}>
+    <ChartFrame title={title} subtitle={subtitle} caption={caption} note={note} minWidth={320}>
       <div className="termstates">
         {states.map((s) => (
           <div key={s.code} className="termstate" style={{ borderTopColor: s.color }}>
@@ -324,6 +376,75 @@ export function TerminalStates({
             </div>
           </div>
         ))}
+      </div>
+    </ChartFrame>
+  );
+}
+
+// ────────────────────────────────────────────────────────────
+// DecisionFlow — one gate, several outcomes
+// ────────────────────────────────────────────────────────────
+// The form for "what does the system do when it cannot answer", which is the
+// most important behaviour in every project here and the hardest to show in
+// prose. A gate on the left, the mutually exclusive branches on the right, each
+// carrying the condition that selects it, the share of traffic it takes, and
+// what the system actually emits. Branches marked `refuses` are styled as
+// refusals rather than as failures: declining to answer is a designed output.
+
+export function DecisionFlow({
+  gate,
+  branches,
+  title,
+  subtitle,
+  caption,
+  note,
+}: {
+  gate: { label: string; detail?: string; inputLabel?: string };
+  branches: {
+    condition: string;
+    outcome: string;
+    emits: string;
+    color: string;
+    share?: string;
+    refuses?: boolean;
+  }[];
+  title?: string;
+  subtitle?: string;
+  caption?: string;
+  note?: string;
+}) {
+  return (
+    <ChartFrame title={title} subtitle={subtitle} caption={caption} note={note} minWidth={340}>
+      <div className="decflow">
+        <div className="decflow-gate">
+          {gate.inputLabel && (
+            <span className="decflow-gate-in">{gate.inputLabel}</span>
+          )}
+          <span className="decflow-gate-label">{gate.label}</span>
+          {gate.detail && <span className="decflow-gate-detail">{gate.detail}</span>}
+        </div>
+        <div className="decflow-branches">
+          {branches.map((b) => (
+            <div
+              key={b.condition}
+              className={`decflow-branch ${b.refuses ? "refuses" : ""}`}
+              style={{ borderLeftColor: b.color }}
+            >
+              <div className="decflow-cond">
+                <span className="decflow-cond-if">if</span>
+                {b.condition}
+                {b.share && <span className="decflow-share">{b.share}</span>}
+              </div>
+              <div className="decflow-outcome" style={{ color: b.color }}>
+                {b.outcome}
+              </div>
+              <div className="decflow-emits">
+                <span>emits</span>
+                {b.emits}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </ChartFrame>
   );

@@ -1141,6 +1141,67 @@ export const cropMonitoring: ProjectDetail = {
           ],
         },
         {
+          kind: "status",
+          title: "What each capability on this page can actually be held to",
+          intro:
+            "Seven capabilities, and they are not equally well founded. Two rest on direct measurement, three on well-documented spectral relationships, and two are inferences reported as directional. Reading them as one product with one confidence is the most common way a monitoring system's weakest output ends up carrying its strongest claim.",
+          items: [
+            {
+              verdict: "verified",
+              claim:
+                "Stressed-area percentage is a direct measurement, not a modelled estimate",
+              evidence:
+                "Each pixel is compared against the healthy population of the same field rather than against a regional model, so the field's own best half is the reference. That removes almost every source of between-field error at once, and it is the strongest number this system produces.",
+            },
+            {
+              verdict: "verified",
+              claim:
+                "Crop cycle and harvest timing are read from the observed canopy trajectory",
+              evidence:
+                "Emergence, canopy closure, peak and senescence are events in the record rather than predictions from it. Heat accumulation explains why the same crop runs on a different calendar in a different season, which is what makes the harvest window a date rather than an average duration.",
+            },
+            {
+              verdict: "defensible",
+              claim:
+                "Canopy nitrogen status from the red edge, against a dilution curve",
+              evidence:
+                "Well-documented spectral physiology: nitrogen is the building block of chlorophyll, and the red-edge position responds to leaf chlorophyll before the canopy visibly thins. Reported as a nutrition index against the curve for the crop's current biomass rather than as a concentration.",
+            },
+            {
+              verdict: "defensible",
+              claim: "Stress typing from reading several index families together",
+              evidence:
+                "Water, nutrient and tissue-damage stress leave different signatures — shortwave infrared, red edge, and pigment ratio respectively — and each call is corroborated against radar, the biomass curve and the weather context before it becomes an alert. Where those disagree the alert is downgraded rather than published.",
+            },
+            {
+              verdict: "cold",
+              claim: "Potassium status",
+              evidence:
+                "Potassium affects water relations and leaf margins and has reasonably documented index relationships, but they are weaker than the nitrogen case and more crop-specific. Published, and published as less certain than nitrogen.",
+            },
+            {
+              verdict: "not-built",
+              claim: "Soil chemistry, and a phosphorus concentration",
+              evidence:
+                "Phosphorus has no direct spectral signature at all. It is inferred from secondary pigment effects and stunted growth patterns and is published as directional only. Salinity, organic carbon and pH are soil property proxies that need exposed soil or an established crop response to say anything, and none of the four is a laboratory result.",
+            },
+            {
+              verdict: "not-built",
+              claim: "Identification of a pest or pathogen from orbit",
+              evidence:
+                "Declined by design and worth being explicit about, because it is the capability most often assumed. The satellite output ranks the agents that current weather, canopy state and growth stage are favouring — it never claims to see the organism. Identification is the photograph-based classifier's job, and the two are complementary rather than overlapping.",
+            },
+            {
+              verdict: "deferred",
+              claim: "A per-crop yield accuracy figure",
+              evidence:
+                "Blocked on ground truth rather than on modelling: harvest labels arrive once per plot per season. Which is precisely why yield is published as a band that narrows through the season rather than as a point estimate, and why the band is the deliverable rather than a hedge around one.",
+            },
+          ],
+          note:
+            "Charts on this page marked representative show the shape of an output on a field like the one described, at its real pixel budget and its real observation cadence. They are illustrations of mechanism, not measured exports.",
+        },
+        {
           kind: "callout",
           tone: "green",
           title: "Why the boundaries are stated as clearly as the capabilities",

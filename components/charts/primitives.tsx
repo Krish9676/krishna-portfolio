@@ -62,11 +62,42 @@ export function niceTicks(min: number, max: number, count = 5): number[] {
   return out;
 }
 
+/**
+ * Width to reserve for a chart's left-hand label column.
+ *
+ * SVG text does not wrap, and anything wider than the gutter is clipped at the
+ * viewBox edge — where a half-drawn row label reads as missing data rather than
+ * as a layout bug. So the gutter is measured from the longest string that has
+ * to fit in it. Groups exist because a row usually carries a label and a note
+ * set at different sizes.
+ *
+ * `charW` is the average advance width in px for the face the text is set in.
+ * Multiply the font size by roughly 0.6 for the mono face and 0.53 for the body
+ * face, then round up — under-estimating it clips the longest label, which is
+ * the one most worth reading.
+ */
+export function labelGutter(
+  groups: { labels: (string | undefined)[]; charW: number }[],
+  { pad = 20, min = 120, max = 320 }: { pad?: number; min?: number; max?: number } = {}
+): number {
+  const widest = Math.max(
+    0,
+    ...groups.flatMap((g) =>
+      g.labels
+        .filter((l): l is string => typeof l === "string")
+        .map((l) => l.length * g.charW)
+    )
+  );
+  return Math.min(max, Math.max(min, Math.ceil(widest) + pad));
+}
+
 /** Wraps a chart with a title, an optional caption, and a scroll container. */
 export function ChartFrame({
   title,
   subtitle,
   caption,
+  note,
+  footer,
   legend,
   representative,
   minWidth = 520,
@@ -75,6 +106,16 @@ export function ChartFrame({
   title?: string;
   subtitle?: string;
   caption?: string;
+  /** Prose that belongs to the chart but must not sit inside the horizontal
+   *  scroller — a keyed list of reasons, for instance. Anything passed as
+   *  `children` inherits `minWidth`, which is right for a plot and wrong for a
+   *  paragraph: on a narrow screen it would make the text itself scroll. */
+  footer?: ReactNode;
+  /** A short technical footnote, set in mono above the caption. Available on
+   *  every chart: a reading instruction or a caveat about one series is a
+   *  different register from the caption's argument, and mixing them buries
+   *  both. */
+  note?: string;
   legend?: ReactNode;
   /** Marks a chart whose shape is illustrative rather than a measured export. */
   representative?: boolean;
@@ -100,6 +141,8 @@ export function ChartFrame({
       <div className="chart-scroll">
         <div style={{ minWidth }}>{children}</div>
       </div>
+      {footer}
+      {note && <p className="chart-note">{note}</p>}
       {caption && <figcaption className="chart-caption">{caption}</figcaption>}
     </figure>
   );

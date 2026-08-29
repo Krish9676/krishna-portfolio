@@ -4,9 +4,16 @@
 import TimeSeries from "./TimeSeries";
 import { MatrixHeatmap, PixelHeatmap } from "./Heatmap";
 import { BarSet, Dumbbell, StackedBars } from "./Bars";
+import { RadarChart } from "./Radar";
 import { ScoreGauge, ScoreWaterfall } from "./Score";
+import { ScatterPlot } from "./Scatter";
+import { NumericMatrix } from "./Matrix";
+import { RankCurve } from "./Distribution";
+import { Funnel } from "./Funnel";
+import { SparkGrid } from "./SmallMultiples";
 import {
   CadenceStrip,
+  DecisionFlow,
   LayerStack,
   Roadmap,
   StageChain,
@@ -30,6 +37,13 @@ export type VizSpec =
   | ({ kind: "roadmap" } & Props<typeof Roadmap>)
   | ({ kind: "cadence" } & Props<typeof CadenceStrip>)
   | ({ kind: "terminal" } & Props<typeof TerminalStates>)
+  | ({ kind: "decision" } & Props<typeof DecisionFlow>)
+  | ({ kind: "scatter" } & Props<typeof ScatterPlot>)
+  | ({ kind: "confusion" } & Props<typeof NumericMatrix>)
+  | ({ kind: "rankcurve" } & Props<typeof RankCurve>)
+  | ({ kind: "funnel" } & Props<typeof Funnel>)
+  | ({ kind: "sparkgrid" } & Props<typeof SparkGrid>)
+  | ({ kind: "radar" } & Props<typeof RadarChart>)
   | ({ kind: "parcelMap" } & Props<typeof ParcelMap>)
   | ({ kind: "boundaryMap" } & Props<typeof BoundaryMap>)
   | ({ kind: "regionGrid" } & Props<typeof RegionGrid>);
@@ -62,6 +76,20 @@ export default function Viz({ spec }: { spec: VizSpec }) {
       return <CadenceStrip {...spec} />;
     case "terminal":
       return <TerminalStates {...spec} />;
+    case "decision":
+      return <DecisionFlow {...spec} />;
+    case "scatter":
+      return <ScatterPlot {...spec} />;
+    case "confusion":
+      return <NumericMatrix {...spec} />;
+    case "rankcurve":
+      return <RankCurve {...spec} />;
+    case "funnel":
+      return <Funnel {...spec} />;
+    case "sparkgrid":
+      return <SparkGrid {...spec} />;
+    case "radar":
+      return <RadarChart {...spec} />;
     case "parcelMap":
       return <ParcelMap {...spec} />;
     case "boundaryMap":

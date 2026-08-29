@@ -64,6 +64,7 @@ interface Props {
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
   representative?: boolean;
   showProvenanceLegend?: boolean;
 }
@@ -80,6 +81,7 @@ export default function TimeSeries({
   title,
   subtitle,
   caption,
+  note,
   representative,
   showProvenanceLegend,
 }: Props) {
@@ -126,6 +128,7 @@ export default function TimeSeries({
       title={title}
       subtitle={subtitle}
       caption={caption}
+      note={note}
       representative={representative}
       legend={
         <>

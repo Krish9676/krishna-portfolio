@@ -5,7 +5,7 @@
 //     coarse on purpose. Pretending otherwise would be the lie.
 //   · MatrixHeatmap — a categorical grid (crops × regions, index × consumer).
 
-import { ChartFrame, palette } from "./primitives";
+import { ChartFrame, labelGutter, palette } from "./primitives";
 
 // ────────────────────────────────────────────────────────────
 // PixelHeatmap
@@ -25,6 +25,7 @@ interface PixelProps {
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
   representative?: boolean;
   /** Optional parcel outline traced around the non-null cells */
   outline?: boolean;
@@ -45,6 +46,7 @@ export function PixelHeatmap({
   title,
   subtitle,
   caption,
+  note,
   representative = true,
   outline = true,
   distribution,
@@ -88,6 +90,7 @@ export function PixelHeatmap({
       title={title}
       subtitle={subtitle}
       caption={caption}
+      note={note}
       representative={representative}
       minWidth={Math.max(320, W)}
       legend={
@@ -188,6 +191,7 @@ interface MatrixProps {
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
   representative?: boolean;
 }
 
@@ -205,12 +209,37 @@ export function MatrixHeatmap({
   title,
   subtitle,
   caption,
+  note,
   representative,
 }: MatrixProps) {
   const cell = 30;
-  const rowW = 132;
-  const headH = 58;
-  const W = rowW + colLabels.length * cell + 12;
+  // Both gutters are sized from the longest label. SVG text does not wrap, so a
+  // fixed gutter clips anything longer at the viewBox edge — and a half-drawn
+  // row label looks like missing data rather than like a layout problem. The
+  // column head allows for the 42-degree rotation the labels are drawn at.
+  const rowW = labelGutter([{ labels: rowLabels, charW: 6.2 }], {
+    min: 120,
+    max: 300,
+    pad: 18,
+  });
+  // Column labels are drawn at -42 degrees, so only their vertical rise has to
+  // clear the top of the grid.
+  const headH = labelGutter([{ labels: colLabels, charW: 5.4 * 0.67 }], {
+    min: 52,
+    max: 130,
+    pad: 26,
+  });
+  // A -42 degree label runs up and to the right of its column, so the last few
+  // columns need room past the grid or their labels are cut off at the edge.
+  const colReach = Math.max(
+    ...colLabels.map(
+      (c, i) => i * cell + cell / 2 + c.length * 5.4 * 0.743
+    )
+  );
+  const W = Math.max(
+    rowW + colLabels.length * cell + 12,
+    rowW + Math.ceil(colReach) + 10
+  );
   const H = headH + rowLabels.length * cell + 8;
 
   return (
@@ -218,6 +247,7 @@ export function MatrixHeatmap({
       title={title}
       subtitle={subtitle}
       caption={caption}
+      note={note}
       representative={representative}
       minWidth={Math.max(420, W)}
       legend={

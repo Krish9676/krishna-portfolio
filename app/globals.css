@@ -40,8 +40,16 @@
   --font-body: var(--font-inter), sans-serif;
   --font-mono: var(--font-jetbrains), monospace;
 
-  /* === SPACING === */
-  --section-padding: 6rem 0;
+  /* === SPACING ===
+     One vertical rhythm for the whole page. `--section-y` is the gap a section
+     puts above and below itself, `--block-gap` the gap between bands inside
+     one section, and `--nav-h` lets sticky elements clear the fixed navbar.
+     Everything scales together, so a spacing change is one edit rather than
+     twenty inline `marginBottom` values. */
+  --nav-h: 72px;
+  --section-y: clamp(4rem, 6vw, 6rem);
+  --section-padding: var(--section-y) 0;
+  --block-gap: clamp(2.5rem, 4vw, 4rem);
   --container-max: 1280px;
 
   /* === TRANSITIONS === */
@@ -148,11 +156,22 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .section-subtitle {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--text-secondary);
-  max-width: 600px;
-  line-height: 1.8;
+  max-width: 62ch;
+  line-height: 1.75;
 }
+
+/* The heading block owns the gap to the content below it, so no section has to
+   carry that spacing as an inline style. */
+.section-head { margin-bottom: var(--block-gap); }
+.section-head .section-subtitle { margin-bottom: 0; }
+
+/* The hero is a full-viewport panel: it already ends with its own breathing
+   room and the mesh horizon sitting in it. A full --section-y on top of that
+   put roughly 155px between the hero's last row and the next section's label,
+   which read as a dead band rather than as a division. */
+.hero + .section { padding-top: calc(var(--section-y) * 0.6); }
 
 /* === CARDS === */
 .card {
@@ -160,7 +179,16 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
   padding: 1.5rem;
-  transition: all var(--transition-base);
+  /* Named properties rather than `all`. With `all`, backdrop-filter is in the
+     transition too, so the blur animated on mount and again on every hover —
+     and an animating blur has to be re-rasterised every frame, which is the
+     single most expensive thing a glass panel can be asked to do. These four
+     are the ones that actually change. */
+  transition:
+    transform var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base),
+    background var(--transition-base);
   position: relative;
   overflow: hidden;
 }
@@ -1416,6 +1444,199 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.22rem;
 }
 
+/* --- decision flow: one gate, several mutually exclusive branches --- */
+.decflow {
+  display: grid;
+  grid-template-columns: 208px minmax(0, 1fr);
+  gap: 1.1rem;
+  align-items: start;
+}
+
+.decflow-gate {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(148, 176, 158, 0.2);
+  border-radius: 10px;
+  background: linear-gradient(150deg, rgba(56, 182, 217, 0.10), transparent 72%);
+  position: sticky;
+  top: 5.5rem;
+}
+
+.decflow-gate-in {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.decflow-gate-label {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.decflow-gate-detail {
+  font-size: 0.76rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.decflow-branches { display: flex; flex-direction: column; gap: 0.7rem; }
+
+/* The rail on the left is the branch: colour identifies the outcome class. */
+.decflow-branch {
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--border-medium);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem 0.75rem;
+  background: rgba(20, 28, 24, 0.42);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+/* A refusal is a designed output, so it reads as deliberate, not broken. */
+.decflow-branch.refuses {
+  background: rgba(224, 168, 62, 0.05);
+  border-style: dashed;
+  border-left-style: solid;
+}
+
+.decflow-cond {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.decflow-cond-if {
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.decflow-share {
+  margin-left: auto;
+  font-size: 0.66rem;
+  color: var(--text-faint);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 0.05rem 0.35rem;
+  white-space: nowrap;
+}
+
+.decflow-outcome {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.decflow-emits {
+  font-size: 0.77rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.decflow-emits span {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 0.2rem;
+}
+
+/* --- funnel drop reasons: prose does not wrap in SVG, so it lives here --- */
+.funnel-drops {
+  list-style: none;
+  margin-top: 0.95rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.funnel-drops li {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.funnel-drop-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.71rem;
+  color: #E0674C;
+}
+
+.funnel-drop-key em {
+  font-style: normal;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  border: 1px solid rgba(224, 103, 76, 0.6);
+  background: rgba(224, 103, 76, 0.14);
+  font-size: 0.62rem;
+}
+
+.funnel-drop-why {
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+/* --- matrix call-outs: the confusions worth naming under the grid --- */
+.matrix-calls {
+  list-style: none;
+  margin-top: 0.95rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.matrix-calls li {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.matrix-call-cell {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #E0674C;
+  line-height: 1.5;
+}
+
+.matrix-call-why {
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
 /* --- cards --- */
 .pb-cards { display: grid; gap: 1rem; }
 .pb-cards.cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
@@ -1716,6 +1937,10 @@ h1, h2, h3, h4, h5, h6 {
      narrow screen — the chart scrolls inside its own container instead. */
   .waterfall-row { grid-template-columns: 124px minmax(0, 1fr) 44px; gap: 0.55rem; }
   .waterfall-loss { display: none; }
+  .decflow { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
+  .decflow-gate { position: static; }
+  .matrix-calls li { grid-template-columns: minmax(0, 1fr); gap: 0.25rem; }
+  .funnel-drops li { grid-template-columns: minmax(0, 1fr); gap: 0.25rem; }
   .pb-status-row { grid-template-columns: minmax(0, 1fr); gap: 0.6rem; }
   .pb-status-badge { justify-self: start; }
   .pb-stackgroup { grid-template-columns: minmax(0, 1fr); gap: 0.45rem; }
@@ -1891,25 +2116,149 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ============================================================
-   ABOUT — opening statement, body copy, engineering signature
-   ============================================================ */
+   ABOUT — three domains, narrative, contact rail, signature, north star
+   ============================================================
+   Laid out as four full-width bands rather than two long columns. The narrative
+   and the contact rail are very different lengths, and running them as equal
+   columns left several hundred pixels of dead space beside the taller one. So
+   the signature themes and the north star became their own bands, and the rail
+   sticks while the narrative scrolls past it.
+
+   Every size here comes from the small scale declared at the top of the block,
+   which is the point: the section previously carried about ten hand-written
+   font sizes, several of them within a third of a pixel of each other. */
+
+.about {
+  --about-fs-lede: 1.075rem;
+  --about-fs-body: 0.98rem;
+  --about-fs-sm: 0.875rem;
+  --about-fs-xs: 0.8rem;
+  --about-fs-meta: 0.72rem;
+  --about-rail-w: 22rem;
+}
+
+/* ── band 1: the three domains ───────────────────────────── */
+
+.domain-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-bottom: var(--block-gap);
+}
+
+/* Fixed rows, so the icon, title, credential and body of all three cards land
+   on the same baselines even when one title wraps and another does not. The
+   trailing 1fr absorbs the difference in body length at the bottom of the card
+   instead of pushing the shared rows out of alignment. */
+.domain-card {
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  justify-items: center;
+  align-content: start;
+  text-align: center;
+  gap: 0.85rem;
+  padding: 1.9rem 1.5rem 1.75rem;
+}
+
+.domain-icon {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 1.6rem;
+  line-height: 1;
+  /* The emoji is a glyph, not an image: bounding it in a tile stops it setting
+     its own line box and keeps the three cards optically identical. */
+}
+
+.domain-card[data-tone="green"] .domain-icon {
+  background: var(--green-glow);
+  border: 1px solid rgba(74, 222, 128, 0.22);
+}
+.domain-card[data-tone="cyan"] .domain-icon {
+  background: var(--cyan-glow);
+  border: 1px solid rgba(56, 182, 217, 0.22);
+}
+.domain-card[data-tone="amber"] .domain-icon {
+  background: var(--amber-glow);
+  border: 1px solid rgba(224, 168, 62, 0.22);
+}
+
+.domain-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-primary);
+  text-wrap: balance;
+}
+
+.domain-card-body {
+  font-size: var(--about-fs-sm);
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 34ch;
+}
+
+/* The credentials are long — "B.Sc. Hons., Agriculture University" needs about
+   278px on one line — and `.badge` is `nowrap` inside a card that is
+   `overflow: hidden`, so on a narrow card the text was silently cut off rather
+   than wrapping. Here it is allowed to wrap, with a softer radius because a
+   two-line pill reads as a broken pill. */
+.domain-card .badge {
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+  line-height: 1.45;
+  max-width: 100%;
+  border-radius: 11px;
+  padding: 0.35rem 0.7rem;
+}
+
+/* ── band 2: narrative + contact rail ────────────────────── */
+
+.about-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--about-rail-w);
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: start;
+  margin-bottom: var(--block-gap);
+}
+
+/* Both column headings share one rule, so they sit on the same baseline and
+   carry the same weight — previously they were two separate inline styles with
+   different bottom margins, which set them half a line apart. */
+.about-blocktitle {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--text-primary);
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.4rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
 
 .about-lede {
-  font-size: 1.08rem;
-  line-height: 1.7;
+  font-size: var(--about-fs-lede);
+  line-height: 1.72;
   color: var(--text-primary);
   padding-left: 1.15rem;
   border-left: 2px solid var(--green-primary);
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.6rem;
 }
 
 .about-para {
+  font-size: var(--about-fs-body);
   color: var(--text-secondary);
-  line-height: 1.85;
-  margin-bottom: 1.25rem;
+  line-height: 1.82;
+  margin-bottom: 1.15rem;
+  max-width: 68ch;
 }
 
-.about-para:last-of-type { margin-bottom: 1.75rem; }
+.about-para:last-child { margin-bottom: 0; }
 
 /* Emphasised technical terms inside the body copy sit slightly brighter than
    the surrounding text rather than shouting in the accent colour. */
@@ -1918,23 +2267,161 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
 }
 
+/* ── the contact rail ────────────────────────────────────── */
+
+.about-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* Moving the themes and the north star into their own bands brought the two
+   columns to within about 25px of each other, so the rail no longer needs to
+   stick to avoid dead space. It is pinned anyway as a safety net for wider
+   copy or a longer list — but only where there is genuinely room for it, since
+   a sticky element taller than the viewport can never scroll to its own end. */
+@media (min-width: 901px) and (min-height: 820px) {
+  .about-rail {
+    position: sticky;
+    top: calc(var(--nav-h) + 1.5rem);
+  }
+}
+
+.about-contact {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+/* Two lines per row — a label and its value. A single line cannot hold both a
+   short phone number and a fifty-character profile URL without one of them
+   wrapping under its own icon. */
+/* `start` rather than `center`: the LinkedIn value wraps to two lines, and
+   centring the icon against a taller row would sit it 8px lower than the four
+   icons above and below it. */
+.about-contact li {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  column-gap: 0.8rem;
+  align-items: start;
+}
+
+.about-contact-icon {
+  grid-row: 1 / span 2;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.about-contact-icon[data-tone="green"] {
+  background: var(--green-glow);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  color: var(--green-primary);
+}
+.about-contact-icon[data-tone="cyan"] {
+  background: var(--cyan-glow);
+  border: 1px solid rgba(56, 182, 217, 0.2);
+  color: var(--cyan-primary);
+}
+.about-contact-icon[data-tone="amber"] {
+  background: var(--amber-glow);
+  border: 1px solid rgba(224, 168, 62, 0.2);
+  color: var(--amber-primary);
+}
+
+.about-contact-label {
+  font-family: var(--font-mono);
+  font-size: 0.63rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  align-self: end;
+  line-height: 1.4;
+}
+
+.about-contact-value {
+  font-size: var(--about-fs-xs);
+  line-height: 1.45;
+  color: var(--text-secondary);
+  text-decoration: none;
+  align-self: start;
+  /* A long profile URL breaks inside the rail rather than widening it. */
+  overflow-wrap: anywhere;
+  transition: color var(--transition-fast);
+}
+
+a.about-contact-value:hover { color: var(--text-primary); }
+
+.about-railgroup-label {
+  font-family: var(--font-mono);
+  font-size: var(--about-fs-meta);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.about-langs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.about-opento {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.about-opento li {
+  display: grid;
+  grid-template-columns: 6px minmax(0, 1fr);
+  column-gap: 0.65rem;
+  align-items: baseline;
+  font-size: var(--about-fs-xs);
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.about-opento li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green-primary);
+  /* Nudged to sit on the first line's optical centre rather than its baseline. */
+  transform: translateY(-0.28em);
+}
+
+/* ── band 3: the signature themes ────────────────────────── */
+
+/* Full width and four across. Inside the narrative column these were a 2 x 2
+   grid in 584px, which gave each theme a 280px measure for a two-line body. */
 .about-themes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1px;
   background: var(--border-subtle);
   border: 1px solid var(--border-subtle);
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  margin-bottom: 2rem;
+  margin-bottom: var(--block-gap);
 }
 
 .about-theme {
   background: var(--bg-surface);
-  padding: 0.95rem 1.1rem;
+  padding: 1.15rem 1.25rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.5rem;
   transition: background var(--transition-fast);
 }
 
@@ -1942,13 +2429,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .about-theme-title {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--about-fs-meta);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--green-primary);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.45rem;
+  line-height: 1.45;
 }
 
 .about-theme-title::before {
@@ -1959,17 +2447,79 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--green-primary);
   box-shadow: 0 0 5px var(--green-primary);
   flex-shrink: 0;
+  margin-top: 0.4em;
 }
 
 .about-theme-body {
-  font-size: 0.79rem;
-  line-height: 1.6;
+  font-size: var(--about-fs-xs);
+  line-height: 1.65;
   color: var(--text-muted);
 }
 
-@media (max-width: 768px) {
-  .about-lede { font-size: 1rem; padding-left: 0.9rem; }
+/* ── band 4: the north star ──────────────────────────────── */
+
+/* Full width, because it is the section's closing statement. At the foot of the
+   narrative column it was a 584px-wide quote with 600px of empty rail beside
+   it, which read as an afterthought rather than as a conclusion. */
+.about-northstar {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.5rem, 4vw, 2.75rem);
+  border-radius: 16px;
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(74, 222, 128, 0.11), transparent 62%),
+    var(--bg-surface);
+}
+
+.about-northstar-label {
+  font-family: var(--font-mono);
+  font-size: var(--about-fs-meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.about-northstar-quote {
+  font-size: clamp(1.02rem, 1.45vw, 1.22rem);
+  line-height: 1.72;
+  font-style: italic;
+  color: var(--text-primary);
+  max-width: 78ch;
+  text-wrap: pretty;
+}
+
+/* ── responsive ──────────────────────────────────────────── */
+
+@media (max-width: 1080px) {
+  .about { --about-rail-w: 19rem; }
+  .about-themes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Two across rather than an auto-fit that squeezed three cards to 263px — at
+   that width the longest credential overflowed the card and was clipped.
+   Matched to the hero's own stacking breakpoint so the page changes shape once
+   rather than twice. */
+@media (max-width: 980px) {
+  .domain-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+  /* Once the rail sits under the narrative there is nothing left to stick to. */
+  .about-main {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--block-gap);
+  }
+}
+
+@media (max-width: 640px) {
+  .domain-cards { grid-template-columns: minmax(0, 1fr); }
   .about-themes { grid-template-columns: minmax(0, 1fr); }
+  .about-lede { font-size: 1rem; padding-left: 0.9rem; }
+  .about-blocktitle { font-size: 1.2rem; }
 }
 
 /* ============================================================
@@ -2036,45 +2586,161 @@ h1, h2, h3, h4, h5, h6 {
   backdrop-filter: blur(2px);
 }
 
-/* --- glass surfaces --- */
+/* ============================================================
+   GLASS
+   ============================================================
+   Frosted panels floating over the field mosaic. Four things have to be true
+   together or the effect collapses into "a slightly transparent box":
+
+     1. Blur AND saturation. Blur alone greys out whatever is behind the panel;
+        pushing saturation back up is what keeps the mosaic's colour readable
+        through it, which is the whole point of putting it there.
+     2. A lit top edge. Real glass catches light on the edge facing the source.
+        One hairline inset highlight does more for the illusion than any amount
+        of transparency.
+     3. A rim that varies around the panel. A uniform 1px border reads as a
+        stroke; a gradient rim that is bright at the top-left and fades away
+        reads as a bevel. Done with a masked ::before so it costs no markup.
+     4. A long, soft, offset shadow. It is what lifts the panel off the ground
+        plane rather than pasting it onto it.
+
+   All four are declared once here as tokens and applied to every surface, so a
+   panel cannot drift out of step with the rest. */
+
+:root {
+  /* Kept close to the pre-glass opacity on purpose. The project pages carry
+     chart labels at 9-11px over this surface, and the temptation with
+     glassmorphism is to buy the effect with transparency — which is exactly the
+     variable that costs legibility. The look here comes from the blur, the
+     saturation, the rim and the shadow; the panel stays nearly as opaque as it
+     was before, so no chart got harder to read in exchange. */
+  --glass-bg: linear-gradient(
+    158deg,
+    rgba(24, 34, 29, 0.70),
+    rgba(11, 16, 13, 0.60)
+  );
+  --glass-bg-strong: linear-gradient(
+    158deg,
+    rgba(28, 39, 33, 0.80),
+    rgba(12, 17, 14, 0.72)
+  );
+  --glass-blur: blur(18px) saturate(155%);
+  --glass-blur-lite: blur(12px) saturate(140%);
+  --glass-border: rgba(158, 190, 170, 0.16);
+  --glass-hi: rgba(255, 255, 255, 0.10);
+  --glass-rim: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0.05) 34%,
+    rgba(255, 255, 255, 0) 62%
+  );
+  --glass-shadow:
+    inset 0 1px 0 var(--glass-hi),
+    0 2px 6px -2px rgba(0, 0, 0, 0.5),
+    0 22px 48px -24px rgba(0, 0, 0, 0.92);
+  --glass-shadow-hover:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 2px 8px -2px rgba(0, 0, 0, 0.55),
+    0 34px 64px -28px rgba(0, 0, 0, 0.96);
+}
+
 .card,
 .chart-frame,
 .skill-card,
 .pb-card,
 .proj-pager-card,
 .termstate,
-.layerstack-card {
-  background: linear-gradient(158deg, rgba(19, 27, 23, 0.72), rgba(11, 15, 13, 0.62));
-  backdrop-filter: blur(14px) saturate(135%);
-  border-color: rgba(148, 176, 158, 0.13);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.055),
-    0 16px 38px -22px rgba(0, 0, 0, 0.9);
+.layerstack-card,
+.about-northstar {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  border-color: var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }
 
+/* The bevel rim. `padding-box` mask leaves only the border ring painted, so one
+   pseudo-element gives every panel a gradient edge without a wrapper div. */
+.card,
+.chart-frame,
+.skill-card,
+.pb-card,
+.proj-pager-card,
+.about-northstar {
+  position: relative;
+}
+
+.card::after,
+.chart-frame::after,
+.skill-card::after,
+.pb-card::after,
+.proj-pager-card::after,
+.about-northstar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--glass-rim);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Smaller inset surfaces: lighter blur, no rim. A bevel on a 40px-tall row is
+   noise rather than depth. */
 .pb-callout,
 .pb-outcome,
 .proj-glance-item,
 .about-theme,
 .pb-status-row,
-.pb-boundary li {
-  backdrop-filter: blur(10px);
+.pb-boundary li,
+.about-contact-icon,
+.hero-pillar-icon,
+.hero-social,
+.badge,
+.skill-tag {
+  backdrop-filter: var(--glass-blur-lite);
 }
 
 .card:hover,
 .skill-card:hover {
   border-color: rgba(74, 222, 128, 0.30);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 26px 54px -26px rgba(0, 0, 0, 0.95),
-    0 0 0 1px rgba(74, 222, 128, 0.10);
+    var(--glass-shadow-hover),
+    0 0 0 1px rgba(74, 222, 128, 0.12);
 }
 
 /* --- navigation glass --- */
 .nav-glass {
-  background: rgba(9, 13, 11, 0.62);
-  backdrop-filter: blur(18px) saturate(140%);
-  border-bottom: 1px solid rgba(148, 176, 158, 0.10);
+  background: rgba(9, 13, 11, 0.58);
+  backdrop-filter: blur(22px) saturate(160%);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04), 0 14px 30px -22px rgba(0, 0, 0, 0.9);
+}
+
+/* A viewer whose browser lacks backdrop-filter, or has it disabled, would
+   otherwise get near-transparent panels over a busy mosaic. Fall back to an
+   opaque surface rather than to an unreadable one.
+
+   Only the standard property is tested. Hand-writing the -webkit- alias here is
+   what broke this in the first place: Lightning CSS deduplicates it against its
+   own prefixing, keeps the prefixed form, and current Chromium has dropped that
+   alias — so the blur silently stopped applying with nothing logged anywhere. */
+@supports not (backdrop-filter: blur(1px)) {
+  .card,
+  .chart-frame,
+  .skill-card,
+  .pb-card,
+  .proj-pager-card,
+  .termstate,
+  .layerstack-card,
+  .about-northstar,
+  .nav-glass {
+    background: linear-gradient(158deg, #17201B, #0C110E);
+  }
 }
 
 /* ============================================================
@@ -2116,7 +2782,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 50px;
   background: rgba(74, 222, 128, 0.06);
   backdrop-filter: blur(10px);
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.25rem;
 }
 
 .hero-live {
@@ -2182,7 +2848,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 2.25rem;
+  margin-bottom: 2rem;
 }
 
 .hero-meta {
@@ -2379,12 +3045,25 @@ h1, h2, h3, h4, h5, h6 {
   .hero-scene { max-width: 320px; }
   .hero-scroll { display: none; }
   .hero-eyebrow { font-size: 0.65rem; letter-spacing: 0.08em; }
-  /* Blur is expensive on mobile GPUs and buys little at this size */
+  /* Blur is expensive on mobile GPUs and buys little at this size: a 12-18px
+     backdrop-filter on a dozen stacked panels is one of the few things that
+     will actually drop frames on a mid-range phone. Trade it for an almost
+     opaque surface, which also keeps small type crisp over the mosaic. The
+     rim, the lit edge and the shadow all stay — those cost nothing and carry
+     most of the panel's depth anyway. */
   .card, .chart-frame, .skill-card, .pb-card,
-  .proj-pager-card, .termstate, .layerstack-card {
+  .proj-pager-card, .termstate, .layerstack-card,
+  .about-northstar {
     backdrop-filter: none;
-    background: linear-gradient(158deg, rgba(19, 27, 23, 0.94), rgba(11, 15, 13, 0.92));
+    background: linear-gradient(158deg, rgba(20, 28, 24, 0.95), rgba(11, 15, 13, 0.93));
   }
+
+  .pb-callout, .pb-outcome, .proj-glance-item, .about-theme,
+  .pb-status-row, .pb-boundary li, .about-contact-icon,
+  .hero-pillar-icon, .hero-social, .badge, .skill-tag {
+    backdrop-filter: none;
+  }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2409,32 +3088,91 @@ h1, h2, h3, h4, h5, h6 {
    Overrides the first pass below it in the cascade.
    ============================================================ */
 
+/* --- backdrop: the ground plane --- */
+
+/* The filled parcel mosaic. Deliberately faint: it exists so the glass above it
+   has something to refract, and it is masked away from the middle of the frame
+   where the type sits. Raising these opacities is the fastest way to make the
+   whole site harder to read. */
+.bd-parcel-fill {
+  opacity: 0.30;
+  stroke: rgba(10, 16, 12, 0.55);
+  stroke-width: 1.1;
+}
+
+.backdrop-hero .bd-parcel-fill { opacity: 0.40; }
+
+/* False-colour plots. These are the one place saturated colour is allowed,
+   because a processed index map is supposed to look processed. */
+.bd-patch-cells { opacity: 0.34; }
+.backdrop-hero .bd-patch-cells { opacity: 0.46; }
+
+.bd-patch-edge {
+  fill: none;
+  stroke: rgba(214, 240, 224, 0.34);
+  stroke-width: 1.4;
+}
+
+.bd-patch { filter: saturate(115%); }
+
+/* Survey grid lying on the ground plane */
+.bd-persp line {
+  stroke: rgba(168, 214, 186, 0.075);
+  stroke-width: 1;
+}
+
+.backdrop-hero .bd-persp line { stroke: rgba(168, 214, 186, 0.11); }
+
+.bd-sky { opacity: 0.85; }
+
 /* --- backdrop line work --- */
 .bd-contour {
   fill: none;
-  stroke: rgba(150, 190, 165, 0.055);
+  stroke: rgba(150, 190, 165, 0.05);
   stroke-width: 1;
 }
 
-.bd-contour-index { stroke: rgba(150, 190, 165, 0.10); stroke-width: 1.2; }
+.bd-contour-index { stroke: rgba(150, 190, 165, 0.09); stroke-width: 1.2; }
 
-.backdrop-hero .bd-contour       { stroke: rgba(150, 190, 165, 0.075); }
-.backdrop-hero .bd-contour-index { stroke: rgba(150, 190, 165, 0.13); }
-
-.bd-parcel {
-  fill: none;
-  stroke: rgba(168, 196, 176, 0.06);
-  stroke-width: 0.9;
-}
-
-.backdrop-hero .bd-parcel { stroke: rgba(168, 196, 176, 0.085); }
+.backdrop-hero .bd-contour       { stroke: rgba(150, 190, 165, 0.07); }
+.backdrop-hero .bd-contour-index { stroke: rgba(150, 190, 165, 0.12); }
 
 .bd-graticule line {
-  stroke: rgba(148, 176, 158, 0.045);
+  stroke: rgba(148, 176, 158, 0.038);
   stroke-width: 1;
 }
 
-.backdrop-hero .bd-graticule line { stroke: rgba(148, 176, 158, 0.06); }
+.backdrop-hero .bd-graticule line { stroke: rgba(148, 176, 158, 0.05); }
+
+/* --- acquisition: satellite and its scan swath --- */
+.bd-beam polygon {
+  fill: rgba(125, 240, 255, 0.045);
+}
+
+.bd-beam line {
+  stroke: rgba(150, 240, 255, 0.16);
+  stroke-width: 1;
+  stroke-dasharray: 5 7;
+  animation: pass-drift 26s linear infinite;
+}
+
+.bd-sat-array { fill: rgba(56, 130, 180, 0.42); stroke: rgba(150, 210, 240, 0.4); stroke-width: 0.9; }
+.bd-sat-bus   { fill: rgba(198, 216, 224, 0.5); stroke: rgba(220, 240, 250, 0.45); stroke-width: 0.9; }
+.bd-sat-strut { stroke: rgba(200, 224, 236, 0.4); stroke-width: 1.2; }
+.bd-sat-eye   { fill: rgba(168, 246, 255, 0.6); }
+.bd-sat-g     { opacity: 0.6; }
+
+/* On a phone the panels are opaque and the blur is off, so the mosaic is no
+   longer being refracted by anything — it is just texture competing with the
+   type. Pull it back hard. Declared here rather than up with the other mobile
+   rules because these selectors are defined below that block and would
+   otherwise win on source order. */
+@media (max-width: 768px) {
+  .bd-parcel-fill { opacity: 0.16; }
+  .bd-patch-cells { opacity: 0.20; }
+  .bd-persp line  { stroke: rgba(168, 214, 186, 0.05); }
+  .bd-sat-g       { opacity: 0.4; }
+}
 
 .bd-track {
   fill: none;
@@ -2595,8 +3333,13 @@ h1, h2, h3, h4, h5, h6 {
    Later in the cascade than the earlier hero rules, so it wins.
    ============================================================ */
 
+/* Asymmetric on purpose. The top pad clears the fixed navbar; the bottom is
+   deliberately much smaller because the next section adds its own `--section-y`
+   underneath it. Matching them left roughly 180px of empty band between the
+   hero's last row and the following section label. The mesh floor lives in
+   this band, so it reads as a horizon rather than as a gap. */
 .hero {
-  padding: 108px 0 96px;
+  padding: calc(var(--nav-h) + 2.25rem) 0 clamp(2rem, 4vh, 3rem);
   min-height: 100vh;
 }
 
@@ -2615,12 +3358,15 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero-copy { max-width: 620px; }
 
-/* --- headline --- */
+/* --- headline ---
+   The vertical steps below run 20 / 24 / 36 / 36 / 32px. The eyebrow sits
+   closest to the title because the two are one unit; the larger steps mark the
+   real breaks between the message, the pillars and the actions. */
 .hero-title {
   font-size: clamp(2.5rem, 4.4vw, 4.15rem);
   line-height: 1.04;
   letter-spacing: -0.03em;
-  margin-bottom: 1.35rem;
+  margin-bottom: 1.5rem;
 }
 
 .hero-title-a { color: var(--green-primary); }
@@ -2629,8 +3375,8 @@ h1, h2, h3, h4, h5, h6 {
 .hero-sub {
   font-size: 1.02rem;
   line-height: 1.75;
-  max-width: 520px;
-  margin-bottom: 2rem;
+  max-width: 56ch;
+  margin-bottom: 2.25rem;
 }
 
 /* --- four pillars --- */

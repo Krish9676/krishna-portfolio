@@ -105,6 +105,7 @@ export function ParcelMap({
   title,
   subtitle,
   caption,
+  note,
   banner,
   labels,
   representative = true,
@@ -115,6 +116,7 @@ export function ParcelMap({
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
   /** The full-width warning the real product renders, not a footnote */
   banner?: string;
   labels?: { declared?: string; measured?: string };
@@ -129,6 +131,7 @@ export function ParcelMap({
       title={title}
       subtitle={subtitle}
       caption={caption}
+      note={note}
       representative={representative}
       minWidth={W}
       legend={
@@ -200,6 +203,7 @@ export function BoundaryMap({
   title,
   subtitle,
   caption,
+  note,
 }: {
   /** Each field a polygon in 0–100 space */
   fields: [number, number][][];
@@ -208,6 +212,7 @@ export function BoundaryMap({
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
 }) {
   const W = 560;
   const H = 340;
@@ -217,6 +222,7 @@ export function BoundaryMap({
       title={title}
       subtitle={subtitle}
       caption={caption}
+      note={note}
       representative
       minWidth={W}
       legend={
@@ -283,6 +289,7 @@ export function RegionGrid({
   title,
   subtitle,
   caption,
+  note,
   unit = "",
 }: {
   rows: number;
@@ -293,6 +300,7 @@ export function RegionGrid({
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
   unit?: string;
 }) {
   const cell = 26;
@@ -308,6 +316,7 @@ export function RegionGrid({
       title={title}
       subtitle={subtitle}
       caption={caption}
+      note={note}
       representative
       minWidth={Math.max(340, W)}
       legend={

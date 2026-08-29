@@ -27,6 +27,7 @@ export function ScoreGauge({
   unitLabel,
   title,
   caption,
+  note,
   representative,
   gateNote,
 }: {
@@ -36,6 +37,7 @@ export function ScoreGauge({
   unitLabel?: string;
   title?: string;
   caption?: string;
+  note?: string;
   representative?: boolean;
   gateNote?: string;
 }) {
@@ -74,6 +76,7 @@ export function ScoreGauge({
     <ChartFrame
       title={title}
       caption={caption}
+      note={note}
       representative={representative}
       minWidth={300}
       legend={
@@ -200,6 +203,7 @@ export function ScoreWaterfall({
   title,
   subtitle,
   caption,
+  note,
   representative,
   gateReasons,
 }: {
@@ -215,6 +219,7 @@ export function ScoreWaterfall({
   title?: string;
   subtitle?: string;
   caption?: string;
+  note?: string;
   representative?: boolean;
   gateReasons?: string[];
 }) {
@@ -231,6 +236,7 @@ export function ScoreWaterfall({
       title={title}
       subtitle={subtitle}
       caption={caption}
+      note={note}
       representative={representative}
       minWidth={520}
     >
