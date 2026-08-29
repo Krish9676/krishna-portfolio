@@ -157,7 +157,7 @@ export default function Education() {
                         style={{
                           padding: "0.2rem 0.6rem",
                           borderRadius: "6px",
-                          background: "rgba(30, 42, 36, 0.5)",
+                          background: "var(--bg-elevated)",
                           border: "1px solid var(--border-subtle)",
                           fontSize: "0.75rem",
                           color: "var(--text-secondary)",

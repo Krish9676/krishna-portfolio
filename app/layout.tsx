@@ -43,6 +43,7 @@ export const metadata: Metadata = {
     "Farm Credit Scoring",
     "Deep Learning",
   ],
+  themeColor: "#F4F7F4",
   authors: [{ name: "Gopikrishna Nallagorla" }],
   creator: "Gopikrishna Nallagorla",
   openGraph: {

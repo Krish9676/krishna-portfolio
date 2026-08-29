@@ -7,20 +7,20 @@
 import type { ReactNode } from "react";
 
 export const palette = {
-  green: "#4ADE80",
-  greenDim: "#2FB863",
-  cyan: "#38B6D9",
-  cyanDim: "#2A93B3",
-  amber: "#E0A83E",
-  amberDim: "#C08F2E",
-  red: "#E0674C",
-  redDim: "#D93A3A",
-  violet: "#A28BD4",
-  ink: "#ECF2ED",
-  muted: "#9DAEA4",
-  faint: "#75867C",
-  grid: "rgba(30,42,36,0.9)",
-  surface: "#0E1412",
+  green: "#178A47",
+  greenDim: "#146F3A",
+  cyan: "#0C7E9C",
+  cyanDim: "#0A6580",
+  amber: "#C48412",
+  amberDim: "#A36C0E",
+  red: "#C24A38",
+  redDim: "#B03A32",
+  violet: "#7B63B8",
+  ink: "#15241C",
+  muted: "#3E5248",
+  faint: "#5E7268",
+  grid: "rgba(21,36,28,0.12)",
+  surface: "#F4F7F4",
 };
 
 /** Four severity / band steps used consistently across every chart on the site. */

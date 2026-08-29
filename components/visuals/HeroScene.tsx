@@ -152,9 +152,9 @@ export default function HeroScene() {
 
           {/* Haze toward the horizon */}
           <linearGradient id="hs-haze" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#080B0A" stopOpacity="0.92" />
-            <stop offset="34%" stopColor="#080B0A" stopOpacity="0.30" />
-            <stop offset="100%" stopColor="#080B0A" stopOpacity="0" />
+            <stop offset="0%" stopColor="#F4F7F4" stopOpacity="0.92" />
+            <stop offset="34%" stopColor="#F4F7F4" stopOpacity="0.30" />
+            <stop offset="100%" stopColor="#F4F7F4" stopOpacity="0" />
           </linearGradient>
 
           <radialGradient id="hs-bloom" cx="50%" cy="50%" r="50%">

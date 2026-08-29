@@ -342,13 +342,13 @@ export default function Backdrop({
 
           {/* Sky above the horizon, ground below it */}
           <linearGradient id={`bd-sky-${v}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#1B4C6B" stopOpacity="0.55" />
-            <stop offset="60%" stopColor="#2A93B3" stopOpacity="0.24" />
-            <stop offset="100%" stopColor="#2A93B3" stopOpacity="0" />
+            <stop offset="0%" stopColor="#B7D6E8" stopOpacity="0.55" />
+            <stop offset="60%" stopColor="#C5E4EC" stopOpacity="0.22" />
+            <stop offset="100%" stopColor="#C5E4EC" stopOpacity="0" />
           </linearGradient>
           <radialGradient id={`bd-horizon-${v}`} cx="50%" cy="100%" r="62%">
-            <stop offset="0%" stopColor="#8FE3C0" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#8FE3C0" stopOpacity="0" />
+            <stop offset="0%" stopColor="#9ED9B8" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#9ED9B8" stopOpacity="0" />
           </radialGradient>
 
           {/* The mosaic fades out toward the horizon so the plane recedes */}

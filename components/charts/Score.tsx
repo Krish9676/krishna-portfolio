@@ -113,7 +113,7 @@ export function ScoreGauge({
               y1={ty0}
               x2={tx1}
               y2={ty1}
-              stroke="#080B0A"
+              stroke={palette.surface}
               strokeWidth="2"
             />
           );

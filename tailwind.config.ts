@@ -15,19 +15,19 @@ export default {
       },
       colors: {
         green: {
-          primary: "#4ADE80",
-          dim: "#2FB863",
+          primary: "#178A47",
+          dim: "#146F3A",
         },
         cyan: {
-          primary: "#38B6D9",
+          primary: "#0C7E9C",
         },
         amber: {
-          primary: "#E0A83E",
+          primary: "#C48412",
         },
         bg: {
-          primary: "#080B0A",
-          surface: "#0E1412",
-          elevated: "#151D19",
+          primary: "#F4F7F4",
+          surface: "#FFFFFF",
+          elevated: "#E8F0EB",
         },
       },
     },
